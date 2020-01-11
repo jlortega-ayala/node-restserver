@@ -1,13 +1,15 @@
 const jwt = require('jsonwebtoken');
 
-// ===================
-// Verificar Token
-// ===================
 
+// =====================
+// Verificar Token
+// =====================
 let verificaToken = (req, res, next) => {
 
     let token = req.get('token');
+
     jwt.verify(token, process.env.SEED, (err, decoded) => {
+
         if (err) {
             return res.status(401).json({
                 ok: false,
@@ -19,14 +21,16 @@ let verificaToken = (req, res, next) => {
 
         req.usuario = decoded.usuario;
         next();
+
     });
-}
 
 
-// ===================
-// Verificar Token
-// ===================
 
+};
+
+// =====================
+// Verifica AdminRole
+// =====================
 let verificaAdmin_Role = (req, res, next) => {
 
     let usuario = req.usuario;
@@ -34,16 +38,15 @@ let verificaAdmin_Role = (req, res, next) => {
     if (usuario.role === 'ADMIN_ROLE') {
         next();
     } else {
-        res.json({
+
+        return res.json({
             ok: false,
             err: {
                 message: 'El usuario no es administrador'
             }
         });
     }
-
-
-}
+};
 
 
 
